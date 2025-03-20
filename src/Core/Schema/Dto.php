@@ -289,6 +289,10 @@ abstract class Dto
      */
     protected function validate(): void
     {
-        // Override this method in child classes to add custom validation
+        //todo: Override this method in child classes to add custom validation
     }
+
+    //todo: support for nested arrays of DTOs
+    //todo: support for nested arrays of arrays
+    //todo: support for nested arrays of arrays of DTOs
 }

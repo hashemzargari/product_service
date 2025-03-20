@@ -65,7 +65,7 @@ class Request
     /**
      * Get all query parameters
      */
-    private function getQueryParams(): array
+    public function getQueryParams(): array
     {
         return $_GET;
     }

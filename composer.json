@@ -5,11 +5,19 @@
             "Hertz\\ProductService\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Hertz\\ProductService\\Tests\\": "tests/"
+        }
+    },
     "authors": [
         {
             "name": "hashem zargari",
             "email": "hashemzargari@gmail.com"
         }
     ],
-    "require": {}
+    "require": {},
+    "require-dev": {
+        "phpunit/phpunit": "^10.0"
+    }
 }

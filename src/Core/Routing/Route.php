@@ -1,6 +1,6 @@
 <?php
 
-namespace Hertz\ProductService\Core\Router;
+namespace Hertz\ProductService\Core\Routing;
 
 class Route
 {
@@ -20,6 +20,14 @@ class Route
         $this->controller = $controller;
         $this->params = [];
         $this->isStatic = !str_contains($path, '{') && !str_contains($path, '}');
+    }
+
+    public static function __set_state(array $state): self
+    {
+        $route = new self($state['path'], $state['method'], $state['controller']);
+        $route->params = $state['params'];
+        $route->isStatic = $state['isStatic'];
+        return $route;
     }
 
     public function getPath(): string

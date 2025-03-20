@@ -4,7 +4,7 @@ namespace Hertz\ProductService\Core;
 
 use Hertz\ProductService\Core\Http\Request;
 use Hertz\ProductService\Core\Http\Response;
-use Hertz\ProductService\Core\Router\BasicRouter;
+use Hertz\ProductService\Core\Routing\BasicRouter;
 use Hertz\ProductService\Core\Http\StatusCode;
 use Hertz\ProductService\Core\Controller\BaseController;
 class App

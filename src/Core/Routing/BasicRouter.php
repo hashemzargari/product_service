@@ -1,6 +1,6 @@
 <?php
 
-namespace Hertz\ProductService\Core\Router;
+namespace Hertz\ProductService\Core\Routing;
 
 use Hertz\ProductService\Core\Http\Request;
 
@@ -43,10 +43,6 @@ class BasicRouter
     public function match(Request $request): ?Route
     {
         $key = $this->generateRouteKey($request);
-        echo "<pre>";
-        var_dump($key);
-        var_dump($this->staticRoutes);
-        echo "</pre>";
 
         // First check static routes
         if (isset($this->staticRoutes[$key])) {
@@ -98,10 +94,14 @@ class BasicRouter
             $segments = explode('/', trim($pattern, '/'));
 
             $current = &$this->routeTrie;
+            $paramIndex = 0;
             foreach ($segments as $segment) {
                 if (preg_match('/\{([^}]+)\}/', $segment)) {
                     $key = '*';
-                    $current['params'][] = trim($segment, '{}');
+                    if (!isset($current['params'])) {
+                        $current['params'] = [];
+                    }
+                    $current['params'][$paramIndex++] = trim($segment, '{}');
                 } else {
                     $key = $segment;
                 }
@@ -120,13 +120,15 @@ class BasicRouter
         $segments = explode('/', trim($path, '/'));
         $params = [];
         $current = $this->routeTrie;
+        $paramIndex = 0;
 
-        foreach ($segments as $i => $segment) {
+        foreach ($segments as $segment) {
             if (isset($current[$segment])) {
                 $current = $current[$segment];
-            } elseif (isset($current['*'])) {
-                $params[$current['params'][$i]] = $segment;
+            } elseif (isset($current['*']) && isset($current['params'][$paramIndex])) {
+                $params[$current['params'][$paramIndex]] = $segment;
                 $current = $current['*'];
+                $paramIndex++;
             } else {
                 return null;
             }

@@ -2,11 +2,12 @@
 
 namespace Hertz\ProductService\Core\Controller;
 
+use Throwable;
 use Hertz\ProductService\Core\Http\Request;
 use Hertz\ProductService\Core\Http\Response;
-use Throwable;
 use Hertz\ProductService\Core\Http\StatusCode;
 use Hertz\ProductService\Core\Exception\ActionNotFoundException;
+use Hertz\ProductService\Core\Schema\Dto;
 
 abstract class BaseController
 {
@@ -28,7 +29,11 @@ abstract class BaseController
             }
 
             // Call the action method
-            return $this->$action($request);
+            $response = $this->$action($request);
+            if ($response instanceof Response) {
+                return $response;
+            }
+            return new Response($response);
         } catch (Throwable $e) {
             return $this->handleException($e);
         }
@@ -40,7 +45,7 @@ abstract class BaseController
      * @param Request $request The incoming request
      * @return Response The response to send back
      */
-    abstract protected function indexAction(Request $request): Response;
+    abstract protected function indexAction(Request $request): Response|Dto|null;
 
 
     /**
