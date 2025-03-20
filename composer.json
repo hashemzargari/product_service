@@ -1,0 +1,15 @@
+{
+    "name": "hertz/product_service",
+    "autoload": {
+        "psr-4": {
+            "Hertz\\ProductService\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "hashem zargari",
+            "email": "hashemzargari@gmail.com"
+        }
+    ],
+    "require": {}
+}
