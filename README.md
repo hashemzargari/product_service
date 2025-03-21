@@ -2,6 +2,22 @@
 
 A modern PHP-based product service that provides a clean, maintainable, and scalable architecture for managing products. The project follows SOLID principles and implements a custom MVC-like pattern.
 
+## Quick Run
+
+1. Start the application:
+```bash
+make up
+```
+
+2. Run migrations:
+```bash
+make migrate
+```
+
+3. Access the API:
+- Get a product by ID: http://localhost:8000/products/{id}
+  Example: http://localhost:8000/products/1
+
 ## Project Structure
 
 ```
@@ -135,23 +151,6 @@ make composer-install
 make up
 ```
 
-### Quick Run
-
-1. Start the application:
-```bash
-make up
-```
-
-2. Run migrations and seed the database:
-```bash
-make migrate
-make seed
-```
-
-3. Access the API:
-- Get a product by ID: http://localhost:8000/products/{id}
-  Example: http://localhost:8000/products/1
-
 ### Configuration
 The application uses YAML-based configuration files in the `configs/` directory:
 - `local.yaml`: Local development settings
@@ -179,25 +178,88 @@ make seed
 
 ## Available Make Commands
 
-The project includes a Makefile with common commands for development tasks:
+The project includes a comprehensive set of Make commands for development tasks:
 
+### Basic Commands
 ```bash
 make help              # Show all available commands
 make build            # Build Docker containers
 make up               # Start containers
 make down             # Stop containers
-make test             # Run all tests
-make test-unit        # Run unit tests
-make test-integration # Run integration tests
-make migrate          # Run migrations
-make migrate-status   # Check migration status
-make seed             # Seed the database
 make clean            # Clean up Docker resources
 make logs             # View application logs
 make shell            # Open shell in container
 ```
 
-For a complete list of available commands, run:
+### Development Commands
+```bash
+make composer-install  # Install PHP dependencies
+make composer-update   # Update PHP dependencies
+make composer-require  # Add new PHP dependency
+```
+
+### Database Commands
+```bash
+make migrate          # Run all pending migrations
+make migrate-status   # Check migration status
+make migrate-rollback # Rollback last migration
+make migrate-reset    # Reset all migrations
+make seed             # Seed the database
+```
+
+### Entity and Migration Commands
+```bash
+make entity-create    # Create a new entity
+make migration-create # Create a new migration
+make migration-edit   # Edit last migration
+```
+
+### Testing Commands
+```bash
+make test             # Run all tests
+make test-unit        # Run unit tests
+make test-integration # Run integration tests
+make test-coverage    # Generate test coverage report
+```
+
+### Creating New Entities and Migrations
+
+1. Create a new entity:
+```bash
+make entity-create name=Product
+```
+This will create:
+- `src/Entity/Product.php`
+- `src/Repository/ProductRepository.php`
+- `src/Controller/ProductController.php`
+- `src/ControllerDtos/ProductDto.php`
+
+2. Create a new migration:
+```bash
+make migration-create name=create_products_table
+```
+This will create a new migration file in `database/migrations/` with timestamp.
+
+3. Edit the migration file to define your schema:
+```php
+public function change()
+{
+    $this->table('products')
+        ->addColumn('name', 'string')
+        ->addColumn('description', 'text')
+        ->addColumn('price', 'decimal')
+        ->addColumn('created_at', 'datetime')
+        ->addColumn('updated_at', 'datetime')
+        ->create();
+}
+```
+
+4. Run the migration:
+```bash
+make migrate
+```
+
+For a complete list of available commands and their options, run:
 ```bash
 make help
 ```
