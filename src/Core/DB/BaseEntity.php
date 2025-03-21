@@ -11,7 +11,7 @@ use Hertz\ProductService\Core\DB\Attributes\Table;
 use ReflectionClass;
 use ReflectionProperty;
 
-abstract class Entity extends Dto
+abstract class BaseEntity extends Dto
 {
     #[Id]
     #[Column(type: 'int', nullable: false)]

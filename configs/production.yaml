@@ -1,0 +1,17 @@
+# Debug settings
+debug: false
+trace: false
+
+# Database credentials
+database:
+  driver: pgsql
+  host: db
+  port: 5432
+  name: product_service
+  user: product_service
+  password: root
+
+# Logging
+log:
+  level: error
+  path: /var/www/logs

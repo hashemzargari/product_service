@@ -3,10 +3,10 @@
 namespace Hertz\ProductService\ControllerDtos\Product\RetrieveProduct;
 
 use Hertz\ProductService\Core\Schema\Dto;
-use Hertz\ProductService\Core\Schema\Field;
+use Hertz\ProductService\Core\Schema\Attributes\Field;
 
 class Request extends Dto
 {
-    #[Field(type: 'integer', required: true)]
-    public int $id;
+    #[Field(name: 'id', type: 'integer', required: true)]
+    public ?int $id = null;
 }

@@ -5,6 +5,8 @@ namespace Hertz\ProductService\Core\Schema;
 use ReflectionClass;
 use ReflectionProperty;
 use ReflectionMethod;
+use Hertz\ProductService\Core\Schema\Attributes\Field;
+use Hertz\ProductService\Core\Schema\Attributes\Validator;
 
 
 abstract class Dto
@@ -85,6 +87,8 @@ abstract class Dto
                 $value = $this->validateAndTransform($value, $field);
 
                 $this->data[$property->getName()] = $value;
+                // Set the actual property value
+                $property->setValue($this, $value);
             }
 
             $this->validate();
@@ -101,7 +105,10 @@ abstract class Dto
     private function getFieldAttribute(ReflectionProperty $property): ?Field
     {
         $attributes = $property->getAttributes(Field::class);
-        return $attributes[0]?->newInstance();
+        if (empty($attributes)) {
+            return null;
+        }
+        return $attributes[0]->newInstance();
     }
 
     /**
@@ -197,14 +204,6 @@ abstract class Dto
     }
 
     /**
-     * Check if DTO is valid
-     */
-    public function isValid(): bool
-    {
-        return $this->isValid;
-    }
-
-    /**
      * Get DTO data as array
      */
     public function toArray(): array
@@ -290,6 +289,25 @@ abstract class Dto
     protected function validate(): void
     {
         //todo: Override this method in child classes to add custom validation
+    }
+
+    /**
+     * Check if the DTO is valid
+     *
+     * @param bool $throwOnError Whether to throw an exception if validation fails
+     * @return bool Returns true if valid, false if invalid
+     * @throws \RuntimeException If validation fails and $throwOnError is true
+     */
+    public function isValid(bool $throwOnError = false): bool
+    {
+        if ($throwOnError && !empty($this->errors)) {
+            $errorMessages = [];
+            foreach ($this->errors as $field => $messages) {
+                $errorMessages[] = "$field: " . implode(', ', $messages);
+            }
+            throw new \InvalidArgumentException('Validation failed: ' . implode('; ', $errorMessages));
+        }
+        return empty($this->errors);
     }
 
     //todo: support for nested arrays of DTOs

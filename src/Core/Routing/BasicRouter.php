@@ -65,24 +65,23 @@ class BasicRouter
 
     private function loadRoutes(): void
     {
-        if (file_exists(self::ROUTES_CACHE_FILE)) {
-            $this->routeTrie = require self::ROUTES_CACHE_FILE;
-            return;
+        // Ensure cache directory exists
+        $cacheDir = dirname(self::ROUTES_CACHE_FILE);
+        if (!is_dir($cacheDir)) {
+            @mkdir($cacheDir, 0777, true);
         }
 
         $this->buildRouteTrie();
 
-        // Ensure cache directory exists
-        $cacheDir = dirname(self::ROUTES_CACHE_FILE);
-        if (!is_dir($cacheDir)) {
-            mkdir($cacheDir, 0777, true);
+        // Try to save compiled routes to cache file, but don't fail if we can't
+        try {
+            @file_put_contents(
+                self::ROUTES_CACHE_FILE,
+                '<?php return ' . var_export($this->routeTrie, true) . ';'
+            );
+        } catch (\Exception $e) {
+            // Silently fail - we'll just rebuild the trie next time
         }
-
-        // Save compiled routes to cache file
-        file_put_contents(
-            self::ROUTES_CACHE_FILE,
-            '<?php return ' . var_export($this->routeTrie, true) . ';'
-        );
     }
 
     private function buildRouteTrie(): void

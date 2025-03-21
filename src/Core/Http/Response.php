@@ -37,15 +37,18 @@ class Response
 
     public function send()
     {
-        if ($this->isBuffered) {
-            $this->flush();
-        }
+
         http_response_code($this->status->value);
         header('Content-Type: ' . $this->contentType);
         header('Access-Control-Allow-Origin: *');
         header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
         header('Access-Control-Allow-Headers: Content-Type');
         header('Access-Control-Allow-Credentials: true');
+
+        // Then handle the body
+        if ($this->isBuffered) {
+            $this->flush();
+        }
 
         if ($this->body instanceof Dto) {
             if ($this->contentType === 'application/json') {
@@ -56,5 +59,10 @@ class Response
         } else {
             echo $this->body;
         }
+    }
+
+    public function getStatusCode(): int
+    {
+        return $this->status->value;
     }
 }

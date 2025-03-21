@@ -15,12 +15,12 @@ class Routes
         self::registerProductRoutes($router);
     }
 
-    final private static function registerInitRoute(BasicRouter $router): void
+    private static function registerInitRoute(BasicRouter $router): void
     {
         $router->addRoute(new Route('/init/', 'GET', Init::class));
     }
 
-    final private static function registerProductRoutes(BasicRouter $router): void
+    private static function registerProductRoutes(BasicRouter $router): void
     {
         $router->addRoute(new Route('/products/{id}', 'GET', RetrieveProductController::class));
     }

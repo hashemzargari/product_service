@@ -1,194 +1,211 @@
 # Product Service
 
-> **Note**: Due to time constraints and personal issues, this project is not in its final stable version. However, all core requirements have been implemented and the basic structure is in place for future development.
-
-## Project Overview
-This is a PHP-based product service that provides a clean, maintainable, and scalable architecture for managing products. The project follows SOLID principles and implements a custom MVC-like pattern.
+A modern PHP-based product service that provides a clean, maintainable, and scalable architecture for managing products. The project follows SOLID principles and implements a custom MVC-like pattern.
 
 ## Project Structure
 
 ```
-src/
-├── Core/             # Core framework components
-│   ├── Configs/      # Configuration classes
-|   |── Http/         # HTTP-related classes
-│   ├── Schema/       # Data transfer objects and validation
-│   ├── View/         # Base view classes
-│   └── Database/     # Database connection and query builder
-├── ControllerDtos/   # Request/Response DTOs for controllers
-├── Controllers/      # Application controllers
-├── Entity/          # Domain entities
-├── Repository/      # Data access layer
-└── View/            # View classes for rendering responses
+.
+├── configs/              # Configuration files
+│   ├── dev.yaml         # Development environment config
+│   ├── local.yaml       # Local environment config
+│   └── production.yaml  # Production environment config
+├── database/            # Database related files
+│   ├── migrations/      # Database migrations
+│   └── seeds/          # Database seeders
+├── public/             # Public directory
+│   └── index.php       # Application entry point
+├── src/                # Source code
+│   ├── Core/           # Core framework components
+│   │   ├── App.php     # Application bootstrap
+│   │   ├── Config/     # Configuration management
+│   │   ├── Controller/ # Base controller classes
+│   │   ├── DB/         # Database components
+│   │   ├── Exception/  # Custom exceptions
+│   │   ├── Http/       # HTTP components
+│   │   ├── Logger/     # Logging components
+│   │   ├── Model/      # Base model classes
+│   │   ├── Routing/    # Routing components
+│   │   ├── Schema/     # Data validation
+│   │   └── View/       # View components
+│   ├── Controller/     # Application controllers
+│   ├── ControllerDtos/ # Request/Response DTOs
+│   ├── Entity/         # Domain entities
+│   ├── Repository/     # Data access layer
+│   ├── Routes.php      # Route definitions
+│   └── View/           # View classes
+├── tests/              # Test files
+│   ├── Integration/    # Integration tests
+│   └── Unit/          # Unit tests
+├── vendor/             # Composer dependencies
+├── .dockerignore      # Docker ignore rules
+├── composer.json      # Composer configuration
+├── composer.lock      # Composer lock file
+├── docker-compose.yml # Docker compose configuration
+├── Dockerfile         # Docker build configuration
+├── Makefile          # Make commands for common tasks
+├── phinx.php         # Database migration config
+└── phpunit.xml       # PHPUnit configuration
 ```
 
 ## Core Components
 
 ### 1. Core Framework (`src/Core/`)
 
-#### HTTP Component (`Core/Http/`)
-- `Request.php`: Handles HTTP requests, query parameters, and body data
-- `Response.php`: Manages HTTP responses with proper headers and content
-- `Router.php`: Routes requests to appropriate controllers based on defined routes
+#### Application (`App.php`)
+- Main application bootstrap
+- Service container management
+- Application lifecycle handling
 
-#### Schema Component (`Core/Schema/`)
-- `Dto.php`: Base class for Data Transfer Objects with validation
-- `ValidationRule.php`: Defines validation rules for DTOs
-- `ValidationRuleType.php`: Enum for different types of validation rules
+#### Configuration (`Config/`)
+- Environment-specific configuration
+- YAML-based configuration files
+- Configuration management system
 
-#### View Component (`Core/View/`)
-- `BaseView.php`: Abstract base class for all views
-- Provides common functionality for rendering responses
+#### Database (`DB/`)
+- Database connection management
+- Query builder
+- Transaction handling
 
-#### Database Component (`Core/Database/`)
-- `Connection.php`: Manages database connections
-- `QueryBuilder.php`: Builds SQL queries with proper escaping
-- `QueryResult.php`: Handles query results and data mapping
+#### HTTP (`Http/`)
+- Request handling
+- Response management
+- HTTP utilities
+
+#### Routing (`Routing/`)
+- Route definitions
+- Route matching
+- Route parameters handling
+
+#### Schema (`Schema/`)
+- Data validation
+- Schema definitions
+- Validation rules
+
+#### View (`View/`)
+- Template rendering
+- View helpers
+- Response formatting
 
 ### 2. Application Components
 
-#### Controllers (`src/Controllers/`)
-- Handle HTTP requests
-- Use DTOs for request/response handling
-- Implement business logic
-- Example: `ProductController.php`
+#### Controllers (`src/Controller/`)
+- Request handling
+- Business logic implementation
+- Response preparation
+
+#### DTOs (`src/ControllerDtos/`)
+- Request/Response data transfer objects
+- Input validation
+- Data transformation
 
 #### Entities (`src/Entity/`)
-- Represent domain models
-- Define data structure and relationships
-- Example: `ProductEntity.php`
+- Domain models
+- Business rules
+- Data relationships
 
 #### Repositories (`src/Repository/`)
-- Handle data access
-- Implement CRUD operations
-- Example: `ProductRepository.php`
+- Data access layer
+- CRUD operations
+- Query optimization
 
-#### Views (`src/View/`)
-- Handle response rendering
-- Format data for client consumption
-- Example: `ProductsView.php`
+## Development Setup
 
-## Adding New Features
+### Prerequisites
+- PHP 8.1 or higher
+- Docker and Docker Compose
+- Composer
+- Make
 
-### 1. Adding a New Route
-1. Define the route in `public/index.php`:
-```php
-$router->addRoute('GET', '/api/new-endpoint', 'NewController@method');
-```
+### Installation
 
-2. Create a new controller in `src/Controllers/`:
-```php
-namespace Hertz\ProductService\Controllers;
-
-class NewController extends BaseController
-{
-    public function method(Request $request)
-    {
-        // Implementation
-    }
-}
-```
-
-### 2. Creating a New Entity
-1. Create a new entity class in `src/Entity/`:
-```php
-namespace Hertz\ProductService\Entity;
-
-class NewEntity
-{
-    public int $id;
-    public string $name;
-    // Add other properties
-}
-```
-
-2. Create corresponding repository in `src/Repository/`:
-```php
-namespace Hertz\ProductService\Repository;
-
-class NewRepository
-{
-    private Connection $connection;
-
-    public function __construct()
-    {
-        $this->connection = new Connection();
-    }
-
-    // Implement CRUD methods
-}
-```
-
-### 3. Adding Request/Response DTOs
-1. Create DTOs in `src/ControllerDtos/`:
-```php
-namespace Hertz\ProductService\ControllerDtos\NewFeature;
-
-class Request extends Dto
-{
-    #[ValidationRule(ValidationRuleType::REQUIRED)]
-    public string $name;
-}
-
-class Response extends Dto
-{
-    public int $id;
-    public string $name;
-}
-```
-
-## Running the Application
-
-### Using Docker
-1. Build and start containers:
+1. Clone the repository:
 ```bash
-docker-compose up -d --build
+git clone [repository-url]
+cd product_service
 ```
 
-2. Run tests:
+2. Install dependencies:
 ```bash
-docker-compose exec app ./vendor/bin/phpunit
+make composer-install
 ```
 
-3. Access phpMyAdmin:
-- URL: http://localhost:8080
-- Username: root
-- Password: root
-
-### Environment Configuration
-The application uses environment variables for configuration. Create a `.env` file with:
+3. Start the development environment:
+```bash
+make up
 ```
-DB_CONNECTION=mysql
-DB_HOST=db
-DB_PORT=3306
-DB_DATABASE=product_service
-DB_USERNAME=product_service
-DB_PASSWORD=root
+
+### Configuration
+The application uses YAML-based configuration files in the `configs/` directory:
+- `local.yaml`: Local development settings
+- `dev.yaml`: Development environment settings
+- `production.yaml`: Production environment settings
+
+### Database Management
+
+1. Run migrations:
+```bash
+make migrate
+```
+
+2. Seed the database:
+```bash
+make seed
+```
+
+### Accessing Services
+
+- Application: http://localhost:8000
+- PgAdmin: http://localhost:8080
+  - Email: admin@admin.com
+  - Password: admin
+
+## Available Make Commands
+
+The project includes a Makefile with common commands for development tasks:
+
+```bash
+make help              # Show all available commands
+make build            # Build Docker containers
+make up               # Start containers
+make down             # Stop containers
+make test             # Run all tests
+make test-unit        # Run unit tests
+make test-integration # Run integration tests
+make migrate          # Run migrations
+make migrate-status   # Check migration status
+make seed             # Seed the database
+make clean            # Clean up Docker resources
+make logs             # View application logs
+make shell            # Open shell in container
+```
+
+For a complete list of available commands, run:
+```bash
+make help
 ```
 
 ## Testing
-The project includes both unit and integration tests:
-- Unit tests: `tests/Unit/`
-- Integration tests: `tests/Integration/`
 
-Run tests with:
+### Running Tests
+
+1. Unit Tests:
 ```bash
-./vendor/bin/phpunit
+make test-unit
 ```
 
-## Future Improvements
-1. Implement proper error handling and logging
-2. Add authentication and authorization
-3. Implement caching layer
-4. Add API documentation
-5. Implement rate limiting
-6. Add more comprehensive test coverage
-7. Implement proper dependency injection
-8. Add request validation middleware
-9. Implement proper response formatting
-10. Add database migrations
+2. Integration Tests:
+```bash
+make test-integration
+```
+
+3. All Tests:
+```bash
+make test
+```
 
 ## Contributing
+
 1. Fork the repository
 2. Create a feature branch
 3. Commit your changes
@@ -196,4 +213,5 @@ Run tests with:
 5. Create a Pull Request
 
 ## License
+
 This project is licensed under the MIT License. 

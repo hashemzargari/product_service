@@ -43,7 +43,7 @@ abstract class BaseRepository implements RepositoryInterface
         return $fields;
     }
 
-    protected function mapToEntity(array $data): Entity
+    protected function mapToEntity(array $data): BaseEntity
     {
         $entity = new $this->entityClass();
         $fields = $this->getFields();
@@ -101,10 +101,9 @@ abstract class BaseRepository implements RepositoryInterface
         return array_map(fn($data) => $this->mapToEntity($data), $results);
     }
 
-    public function findById(int $id): ?Entity
+    public function findById(int $id): ?BaseEntity
     {
         $table = $this->getTableName();
-        // var_dump("SELECT * FROM {$table} WHERE id = :id");
         $stmt = $this->db->prepare("SELECT * FROM {$table} WHERE id = :id");
         $stmt->execute(['id' => $id]);
         $data = $stmt->fetch(PDO::FETCH_ASSOC);

@@ -3,19 +3,15 @@
 namespace Hertz\ProductService\Entity;
 
 use \DateTime;
-use Hertz\ProductService\Core\DB\Entity;
+use Hertz\ProductService\Core\DB\BaseEntity;
 use Hertz\ProductService\Core\DB\Attributes\Id;
 use Hertz\ProductService\Core\DB\Attributes\Column;
 use Hertz\ProductService\Core\DB\Attributes\Table;
 
 
 #[Table(name: 'products')]
-class ProductEntity extends Entity
+class ProductEntity extends BaseEntity
 {
-    #[Id]
-    #[Column(name: 'id', type: 'int', nullable: false)]
-    public int $id;
-
     #[Column(name: 'name', type: 'string', nullable: false)]
     public string $name;
 
@@ -27,12 +23,6 @@ class ProductEntity extends Entity
 
     #[Column(name: 'category', type: 'string', nullable: false)]
     public string $category;
-
-    #[Column(name: 'created_at', type: 'datetime', nullable: false)]
-    public DateTime $createdAt;
-
-    #[Column(name: 'updated_at', type: 'datetime', nullable: false)]
-    public DateTime $updatedAt;
 
     // todo: for attributes fields, we need to add a new attribute to the entity class (like @ManyToOne, @OneToMany, @ManyToMany, etc.)
 }

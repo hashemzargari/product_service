@@ -9,6 +9,7 @@ class Request
     private $params;
     private $headers;
     private $body;
+    private $pathParams = [];
 
     public function __construct()
     {
@@ -17,6 +18,30 @@ class Request
         $this->headers = $this->getHeaders();
         $this->params = $this->getQueryParams();
         $this->body = $this->getRequestBody();
+    }
+
+    /**
+     * Set URL path parameters
+     */
+    public function setPathParams(array $params): void
+    {
+        $this->pathParams = $params;
+    }
+
+    /**
+     * Get all URL path parameters
+     */
+    public function getPathParams(): array
+    {
+        return $this->pathParams;
+    }
+
+    /**
+     * Get a specific URL path parameter
+     */
+    public function getPathParam(string $key, $default = null)
+    {
+        return $this->pathParams[$key] ?? $default;
     }
 
     /**
@@ -81,7 +106,7 @@ class Request
     /**
      * Get request body data
      */
-    private function getRequestBody(): array
+    public function getRequestBody(): array
     {
         $body = file_get_contents('php://input');
         if (empty($body)) {
@@ -185,5 +210,21 @@ class Request
             default:
                 return true;
         }
+    }
+
+    /**
+     * Get all request parameters merged from path, query and body
+     * Path parameters take precedence over query parameters,
+     * which take precedence over body parameters
+     *
+     * @return array All request parameters merged
+     */
+    public function getAll(): array
+    {
+        return array_merge(
+            $this->getRequestBody() ?? [],
+            $this->getQueryParams() ?? [],
+            $this->getPathParams() ?? []
+        );
     }
 }

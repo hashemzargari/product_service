@@ -1,0 +1,46 @@
+# PHP
+/vendor/
+composer.phar
+.phpunit.result.cache
+.php-cs-fixer.cache
+
+# IDE
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Cache and logs
+/var/cache/*
+/var/logs/*
+/logs/*
+*.log
+
+# Docker
+.docker/
+docker-compose.override.yml
+
+# Database
+*.sqlite
+*.sqlite3
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Testing
+/phpunit.xml
+.phpunit.cache/
+/coverage/
+.coverage
+coverage.xml
