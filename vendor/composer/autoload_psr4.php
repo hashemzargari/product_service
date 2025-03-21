@@ -23,6 +23,7 @@ return array(
     'PhpParser\\' => array($vendorDir . '/nikic/php-parser/lib/PhpParser'),
     'Phinx\\' => array($vendorDir . '/robmorgan/phinx/src/Phinx'),
     'Monolog\\' => array($vendorDir . '/monolog/monolog/src/Monolog'),
+    'Mockery\\' => array($vendorDir . '/mockery/mockery/library/Mockery'),
     'League\\Container\\' => array($vendorDir . '/league/container/src'),
     'Hertz\\ProductService\\Tests\\' => array($baseDir . '/tests'),
     'Hertz\\ProductService\\' => array($baseDir . '/src'),

@@ -14,9 +14,9 @@ class ProductsView extends BaseView
     protected ProductRepository $repository;
     protected RetrieveProductRequest $request;
 
-    public function __construct(Request $request)
+    public function __construct(Request $request, ?ProductRepository $repository = null)
     {
-        $this->repository = new ProductRepository();
+        $this->repository = $repository ?? new ProductRepository();
         $this->request = RetrieveProductRequest::fromArray($request->getAll());
         $this->request->isValid(true);
     }

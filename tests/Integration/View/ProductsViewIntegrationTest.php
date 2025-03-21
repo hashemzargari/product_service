@@ -16,6 +16,7 @@ class ProductsViewIntegrationTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        \Hertz\ProductService\Core\Config\DatabaseConfig::loadConfig('test');
         $this->repository = new ProductRepository();
         $this->request = new Request();
     }
@@ -24,7 +25,7 @@ class ProductsViewIntegrationTest extends TestCase
     {
         // Arrange
         $productId = 1;
-        $this->request->setQueryParams(['id' => $productId]);
+        $this->request->setAll(['id' => $productId]);
         $view = new ProductsView($this->request);
 
         // Act
@@ -33,5 +34,18 @@ class ProductsViewIntegrationTest extends TestCase
         // Assert
         $this->assertInstanceOf(ProductEntity::class, $result);
         $this->assertEquals($productId, $result->id);
+    }
+
+    public function testGetDataReturnsNullWhenIdIsNotProvided()
+    {
+        // Arrange
+        $this->request->setAll([]);
+        $view = new ProductsView($this->request);
+
+        // Act
+        $result = $view->getData();
+
+        // Assert
+        $this->assertNull($result);
     }
 }

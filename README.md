@@ -135,6 +135,23 @@ make composer-install
 make up
 ```
 
+### Quick Run
+
+1. Start the application:
+```bash
+make up
+```
+
+2. Run migrations and seed the database:
+```bash
+make migrate
+make seed
+```
+
+3. Access the API:
+- Get a product by ID: http://localhost:8000/products/{id}
+  Example: http://localhost:8000/products/1
+
 ### Configuration
 The application uses YAML-based configuration files in the `configs/` directory:
 - `local.yaml`: Local development settings

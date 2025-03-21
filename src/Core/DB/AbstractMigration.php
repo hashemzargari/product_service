@@ -3,7 +3,7 @@
 namespace Hertz\ProductService\Core\DB;
 
 use Phinx\Migration\AbstractMigration as PhinxMigration;
-use Hertz\ProductService\Core\DB\Entity;
+use Hertz\ProductService\Core\DB\BaseEntity;
 
 abstract class AbstractMigration extends PhinxMigration
 {
@@ -13,7 +13,7 @@ abstract class AbstractMigration extends PhinxMigration
     protected function createEntityTable(string $entityClass): void
     {
         /**
-         * @var Entity $entity
+         * @var BaseEntity $entity
          */
         $entity = new $entityClass();
         $tableName = $entity->getTable();
@@ -43,7 +43,7 @@ abstract class AbstractMigration extends PhinxMigration
 
         // Add primary key
         if (!empty($primaryKey)) {
-            $table->setPrimaryKey([$primaryKey['property']]);
+            $table->addIndex([$primaryKey['property']], ['unique' => true]);
         }
 
         // Add foreign keys
